@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 
+
 start_url = 'http://bj.58.com/sale.shtml'
 url_host = 'http://bj.58.com'
 
