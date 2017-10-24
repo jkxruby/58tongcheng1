@@ -9,7 +9,7 @@ def get_channel_urls(url):
     wb_data = requests.get(start_url)
     soup = BeautifulSoup(wb_data.text, 'lxml')
     links = soup.select('ul.ym-submnu > li > b > a')  # 寻找该标签时比较麻烦，因为它是hover显示
-    print(links)
+    #print(links)
     for link in links:
         page_url = url_host + str(link.get('href'))
         print(page_url)

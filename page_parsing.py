@@ -21,7 +21,7 @@ def get_links_from(channel,pages,who_sells=0): # who_sells = 0表示个人，1�
             # 注意!!!上面代码后面，若是('td.t >a.t')即无法显示结果，必须空格！这样才对('td.t > a.t')
 
             item_link = link.get('href').split('?')[0] # 这里的0是对切片后的字符串形成的列表list进行筛选，选第一段，即0（for in 就是对列表的）
-            url_list.insert_one({'url': item_link })
+            url_list.insert_one({'url': item_link }) # insert是数据库函数，注意区分
             print(item_link)
     else:
         pass
