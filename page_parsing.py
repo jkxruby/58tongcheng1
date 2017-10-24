@@ -5,7 +5,8 @@ import pymongo
 
 client = pymongo.MongoClient('localhost', 27017)
 chengxu = client['chengxu']
-url_list = chengxu['url_list']
+url_list = chengxu['url_list3']
+item_info = url_list['item_info3']
 
 # spider 1 爬取首页中显示的类目中，一个类目下的所有商品的链接
 def get_links_from(channel,pages,who_sells=0): # who_sells = 0表示个人，1表示商家
@@ -16,12 +17,23 @@ def get_links_from(channel,pages,who_sells=0): # who_sells = 0表示个人，1�
     soup = BeautifulSoup(wb_data.text, 'lxml')
     if soup.find('td','t'):  # 一个类目的页码是有限的，通过寻找td.t来判断系统是否爬过头了
         for link in soup.select('td.t  a.t'):  # 这里的td.t a.t 是点击某个分类后的新网页的每个具体商品的链接的selector
+        #for link in soup.select( ('td.t a.t') if not soup.find_all('zhiding', 'huishou') else None ): #修改失败，计划排除被抓取的几排广告
             # 注意!!!上面代码后面，若是('td.t >a.t')即无法显示结果，必须空格！这样才对('td.t > a.t')
+
             item_link = link.get('href').split('?')[0] # 这里的0是对切片后的字符串形成的列表list进行筛选，选第一段，即0（for in 就是对列表的）
             url_list.insert_one({'url': item_link })
             print(item_link)
     else:
         pass
-#get_links_from('http://bj.58.com/shuma/', 2)
+get_links_from('http://bj.58.com/shuma/', 2)
 
 # spider 2 爬详情页的数据
+def get_item_info(url):
+    wb_data = requests.get(url)
+    soup = BeautifulSoup(wb_data.text, 'lxml')
+    title = soup.title.text
+    price = soup.select('span.price_now i')
+    area = soup.select('.palce_li i') if soup.find_all('i') else None
+    print(title,price,area)
+
+#get_item_info('http://zhuanzhuan.58.com/detail/922272570788773901z.shtml')
