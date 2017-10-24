@@ -38,12 +38,12 @@ def get_item_info(url):
     else:
         title = soup.title.text
         price = soup.select('span.price_now i')[0].text
-        # 后面必须加[0].text,因为数据库要是str才能存进去，soup.select结果是list，就算list里面只有一个元素，也不能用.text方法，所以才选择用[0],把元素从list调出来，再进行.text方法
+        # 后面必须加[0].text,因为数据库要是str才能存进去，soup.select返回的对象是list，就算list里面只有一个元素，也不能用.text方法，所以才选择用[0],把元素从list调出来，再进行.text方法
         area = soup.select('.palce_li i')[0].text if soup.find_all('i') else None
         item_info.insert_one({'title':title, 'price':price, 'area':area })
         print({'title': title, 'price': price, 'area':area})
 
-get_item_info('http://zhuanzhuan.58.com/detail/919823388320399372z.shtml')
+#get_item_info('http://zhuanzhuan.58.com/detail/919823388320399372z.shtml')
 
 #======= AAA 爬取的商品链接中有失效的，剔除它(商品已交易则该网址会失效)，测试完该段代码备注掉==========#
 # url = 'http://zhuanzhuan.58.com/detail/922439089107222541z.shtml'  # 网址上的商品已下架

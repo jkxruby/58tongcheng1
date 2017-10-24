@@ -74,9 +74,6 @@ http://bj.58.com/qinglvqingqu/
 http://bj.58.com/qingquneiyi/
 http://bj.58.com/chengren/
 http://bj.58.com/xiaoyuan/
-http://bj.58.com/ershouqiugou/
-http://bj.58.com/tiaozao/
-http://bj.58.com/tiaozao/
-http://bj.58.com/tiaozao/
+
 '''
 
