@@ -25,15 +25,39 @@ def get_links_from(channel,pages,who_sells=0): # who_sells = 0表示个人，1�
             print(item_link)
     else:
         pass
-get_links_from('http://bj.58.com/shuma/', 2)
+#get_links_from('http://bj.58.com/shuma/', 2)
 
 # spider 2 爬详情页的数据
 def get_item_info(url):
     wb_data = requests.get(url)
     soup = BeautifulSoup(wb_data.text, 'lxml')
-    title = soup.title.text
-    price = soup.select('span.price_now i')
-    area = soup.select('.palce_li i') if soup.find_all('i') else None
-    print(title,price,area)
+    no_longer_exist = '商品已下架' in soup.find('div', "button_li").get_text() # 从下方 AAA 处移过来的代码，理解时先忽略它。
+    # find()里面的代码实际是完整的div="button_li",而且要保证该段代码在正常网页和已下架网页中都存在，否则正常网页报错。
+    if no_longer_exist:
+        pass
+    else:
+        title = soup.title.text
+        price = soup.select('span.price_now i')[0].text
+        # 后面必须加[0].text,因为数据库要是str才能存进去，soup.select结果是list，就算list里面只有一个元素，也不能用.text方法，所以才选择用[0],把元素从list调出来，再进行.text方法
+        area = soup.select('.palce_li i')[0].text if soup.find_all('i') else None
+        item_info.insert_one({'title':title, 'price':price, 'area':area })
+        print({'title': title, 'price': price, 'area':area})
 
-#get_item_info('http://zhuanzhuan.58.com/detail/922272570788773901z.shtml')
+get_item_info('http://zhuanzhuan.58.com/detail/919823388320399372z.shtml')
+
+#======= AAA 爬取的商品链接中有失效的，剔除它(商品已交易则该网址会失效)，测试完该段代码备注掉==========#
+# url = 'http://zhuanzhuan.58.com/detail/922439089107222541z.shtml'  # 网址上的商品已下架
+# wb_data = requests.get(url)
+# soup = BeautifulSoup(wb_data.text, 'lxml')
+#print(soup.prettify())
+
+# 上面的步骤查询了失效网址的结构。
+#no_longer_exist = '商品已下架' in soup.find('span', "soldout_btn").get_text()  # 搬到上方get_item_info
+#print (no_longer_exist) # 查看no_longer_exist是True False。上面的find里代码必须是完整的<xxx>内容，形成一个list，否则系统报错属性错误或者无法迭代
+
+
+
+
+
+
+
